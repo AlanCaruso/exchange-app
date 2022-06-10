@@ -8,7 +8,8 @@ function App() {
   const [currency, setCurrency] = useState([]);
   const [inputValue, setInputValue] = useState();
   const [exchangeValue, setExchangeValue] = useState();
-  const [toValue, setToValue] = useState();
+  const [fromValueInfo, setFromValueInfo] = useState();
+  const [toValueInfo, setToValueInfo] = useState();
   const [fromValue, setFromValue] = useState();
   const [from, setFrom] = useState("USD");
   const [toCurrency, setToCurrency] = useState("EUR");
@@ -18,6 +19,7 @@ function App() {
     axios.get(`https://api.vatcomply.com/rates?base=${from}`)
       .then(res => {
         setCurrency(res.data.rates[toCurrency]);
+        setFromValue(res.data.rates[from])
 
       })
   }, [from]);
@@ -38,7 +40,8 @@ function App() {
   function convert() {
     var rate = currency;
     setExchangeValue(inputValue * rate)
-    setToValue(rate)
+    setFromValueInfo(rate);
+    setToValueInfo(fromValue / rate);
 
 
   }
@@ -62,12 +65,12 @@ function App() {
                 </div>
                 <div className="row">
                   <div className='col'>
-                    <h5>1 USD = {toValue}</h5>
+                    <h5>1 USD = {fromValueInfo}</h5>
                   </div>
                 </div>
                 <div className="row">
                   <div className='col'>
-                    <h5 className=''>1 EUR = {fromValue}</h5>
+                    <h5 className=''>1 EUR = {toValueInfo}</h5>
                   </div>
                 </div>
               </div>
