@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios, { Axios } from "axios";
+import Dropdown from "./components/Dropdown"
+import axios from "axios";
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -11,20 +12,22 @@ function App() {
   const [fromValueInfo, setFromValueInfo] = useState();
   const [toValueInfo, setToValueInfo] = useState();
   const [fromValue, setFromValue] = useState();
+  const [currencySelected, setCurrencySelected] = useState();
   const [from, setFrom] = useState("USD");
   const [toCurrency, setToCurrency] = useState("EUR");
+
 
 
   useEffect(() => {
     axios.get(`https://api.vatcomply.com/rates?base=${from}`)
       .then(res => {
         setCurrency(res.data.rates[toCurrency]);
-        setFromValue(res.data.rates[from])
+        setFromValue(res.data.rates[from]);
+        setCurrencySelected(res.data.rates);
 
       })
   }, [from]);
 
-  console.log(currency)
 
   useEffect(() => {
     let defaultValue = "1.00";
@@ -42,9 +45,9 @@ function App() {
     setExchangeValue(inputValue * rate)
     setFromValueInfo(rate);
     setToValueInfo(fromValue / rate);
-
-
   }
+
+
 
   return (
     <div className="App">
@@ -53,8 +56,17 @@ function App() {
           <div className="card-body">
             <div className="row">
               <div className='col'>
-                <label for="formGroupExampleInput" className="form-label">Amount</label>
-                <input type="text" className="form-control" id="formGroupExampleInput" placeholder="1,00" value={inputValue} onChange={getData} />
+                <div className='row'>
+                  <div className='col mb-3'>
+                    <label for="formGroupExampleInput" className="form-label">Amount</label>
+                    <input type="text" className="form-control" id="formGroupExampleInput" placeholder="1,00" value={inputValue} onChange={getData} />
+                  </div>
+                </div>
+                <div className='row'>
+                  <div className='col'>
+                    <Dropdown />
+                  </div>
+                </div>
               </div>
               <div className='col'>
                 <h3 className='text-secondary'>{inputValue} USD =</h3>
