@@ -23,6 +23,7 @@ const Layout = () => {
                 setCurrencyValue(res.data.rates[toCurrency]);
                 setFromValue(res.data.rates[from]);
 
+
             })
     }, [from]);
     console.log("value", fromValue)
@@ -39,9 +40,12 @@ const Layout = () => {
         setInputValue(defaultValue);
         convert();
 
+
     }, [currencyValue])
 
     console.log(currencyData)
+
+
 
     function convert() {
         var rate = currencyValue;
@@ -80,7 +84,7 @@ const Layout = () => {
                             <div className='row'>
                                 <div className='col'>
                                     <div>
-                                        <select class="form-select" onChange={handleSelector} aria-label="Default select example">
+                                        <select class="form-select" value="USD" onChange={handleSelector} aria-label="Default select example">
                                             {currencyData && currencyData.length ?
                                                 currencyData.map((p, index) => (
                                                     <option key={index} value={p}>{p}</option>
