@@ -1,95 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import Dropdown from "./components/Dropdown"
-import axios from "axios";
+import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import Layout from './components/Layout';
 
 
-function App() {
-  const [currency, setCurrency] = useState([]);
-  const [inputValue, setInputValue] = useState();
-  const [exchangeValue, setExchangeValue] = useState();
-  const [fromValueInfo, setFromValueInfo] = useState();
-  const [toValueInfo, setToValueInfo] = useState();
-  const [fromValue, setFromValue] = useState();
-  const [currencySelected, setCurrencySelected] = useState();
-  const [from, setFrom] = useState("USD");
-  const [toCurrency, setToCurrency] = useState("EUR");
-
-
-
-  useEffect(() => {
-    axios.get(`https://api.vatcomply.com/rates?base=${from}`)
-      .then(res => {
-        setCurrency(res.data.rates[toCurrency]);
-        setFromValue(res.data.rates[from]);
-        setCurrencySelected(res.data.rates);
-
-      })
-  }, [from]);
-
-
-  useEffect(() => {
-    let defaultValue = "1.00";
-    setInputValue(defaultValue);
-    convert();
-  }, [currency])
-
-  function getData(val) {
-    setInputValue(val.target.value);
-    setExchangeValue(inputValue * currency)
-  }
-
-  function convert() {
-    var rate = currency;
-    setExchangeValue(inputValue * rate)
-    setFromValueInfo(rate);
-    setToValueInfo(fromValue / rate);
-  }
-
+function App(props) {
 
 
   return (
     <div className="App">
-      <div className='w-100 d-flex justify-content-center mt-5'>
-        <div className="card w-75">
-          <div className="card-body">
-            <div className="row">
-              <div className='col'>
-                <div className='row'>
-                  <div className='col mb-3'>
-                    <label for="formGroupExampleInput" className="form-label">Amount</label>
-                    <input type="text" className="form-control" id="formGroupExampleInput" placeholder="1,00" value={inputValue} onChange={getData} />
-                  </div>
-                </div>
-                <div className='row'>
-                  <div className='col'>
-                    <Dropdown />
-                  </div>
-                </div>
-              </div>
-              <div className='col'>
-                <h3 className='text-secondary'>{inputValue} USD =</h3>
-                <div className="row">
-                  <div className='col'>
-                    <h3>{exchangeValue} EUR</h3>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className='col'>
-                    <h5>1 USD = {fromValueInfo}</h5>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className='col'>
-                    <h5 className=''>1 EUR = {toValueInfo}</h5>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div >
-        </div>
-      </div>
+      <Layout />
     </div>
   );
 }
