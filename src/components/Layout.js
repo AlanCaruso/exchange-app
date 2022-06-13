@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 const Layout = () => {
 
-    const [currency, setCurrency] = useState([]);
+    const [currencyValue, setCurrencyValue] = useState([]);
     const [exchangeValue, setExchangeValue] = useState();
     const [fromValueInfo, setFromValueInfo] = useState();
     const [toValueInfo, setToValueInfo] = useState();
@@ -20,12 +20,12 @@ const Layout = () => {
     useEffect(() => {
         axios.get(`https://api.vatcomply.com/rates?base=${from}`)
             .then(res => {
-                setCurrency(res.data.rates[toCurrency]);
+                setCurrencyValue(res.data.rates[toCurrency]);
                 setFromValue(res.data.rates[from]);
 
             })
     }, [from]);
-
+    console.log("value", fromValue)
     useEffect(() => {
         axios.get(`https://api.vatcomply.com/currencies`)
             .then(res => {
@@ -39,12 +39,12 @@ const Layout = () => {
         setInputValue(defaultValue);
         convert();
 
-    }, [currency])
+    }, [currencyValue])
 
     console.log(currencyData)
 
     function convert() {
-        var rate = currency;
+        var rate = currencyValue;
         setExchangeValue(inputValue * rate)
         setFromValueInfo(rate);
         setToValueInfo(fromValue / rate);
@@ -53,14 +53,15 @@ const Layout = () => {
     const getData = (val) => {
         setInputValue(val.target.value);
         console.log(inputValue)
-        setExchangeValue(inputValue * currency)
+        setExchangeValue(inputValue * currencyValue)
 
     }
     const setCurrencyChange = () => {
 
     }
     const handleSelector = (event) => {
-        setCurrencySelected(event.target.value)
+        setFrom(event.target.value)
+        console.log("from", from)
     }
 
 
@@ -79,7 +80,7 @@ const Layout = () => {
                             <div className='row'>
                                 <div className='col'>
                                     <div>
-                                        <select class="form-select" aria-label="Default select example">
+                                        <select class="form-select" onChange={handleSelector} aria-label="Default select example">
                                             {currencyData && currencyData.length ?
                                                 currencyData.map((p, index) => (
                                                     <option key={index} value={p}>{p}</option>
@@ -90,20 +91,20 @@ const Layout = () => {
                             </div>
                         </div>
                         <div className='col'>
-                            <h3 className='text-secondary'>{inputValue} =</h3>
+                            <h3 className='text-secondary'>{inputValue} {from} =</h3>
                             <div className="row">
                                 <div className='col'>
-                                    <h3>{exchangeValue} EUR</h3>
+                                    <h3>{exchangeValue} {toCurrency}</h3>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className='col'>
-                                    <h5>1 USD = {fromValueInfo}</h5>
+                                    <h5>1 {from} = {fromValueInfo} {toCurrency}</h5>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className='col'>
-                                    <h5 className=''>1 EUR = {toValueInfo}</h5>
+                                    <h5 className=''>1 EUR = {toValueInfo} {from}</h5>
                                 </div>
                             </div>
                         </div>
