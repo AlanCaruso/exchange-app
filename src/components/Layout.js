@@ -12,7 +12,7 @@ const Layout = () => {
     const [currencySelected, setCurrencySelected] = useState();
     const [from, setFrom] = useState("USD");
     const [toCurrency, setToCurrency] = useState("EUR");
-    const [inputValue, setInputValue] = useState();
+    const [inputValue, setInputValue] = useState("");
     const [currencyData, setCurrencyData] = useState([])
 
 
@@ -78,7 +78,7 @@ const Layout = () => {
                             <div className='row'>
                                 <div className='col mb-3'>
                                     <label for="formGroupExampleInput" className="form-label">Amount</label>
-                                    <input type="text" className="form-control" id="formGroupExampleInput" placeholder="1,00" onChange={getData} />
+                                    <input type="text" className="form-control" id="formGroupExampleInput" placeholder="1.00" value={inputValue} onChange={getData} />
                                 </div>
                             </div>
                             <div className='row'>
