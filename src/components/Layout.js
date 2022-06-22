@@ -9,7 +9,6 @@ const Layout = () => {
     const [fromValueInfo, setFromValueInfo] = useState();
     const [toValueInfo, setToValueInfo] = useState();
     const [fromValue, setFromValue] = useState();
-    const [currencySelected, setCurrencySelected] = useState();
     const [from, setFrom] = useState("USD");
     const [toCurrency, setToCurrency] = useState("EUR");
     const [inputValue, setInputValue] = useState("");
@@ -32,7 +31,6 @@ const Layout = () => {
             .then(res => {
                 setCurrencyData(Object.getOwnPropertyNames(res.data).sort());
             })
-        setCurrencyChange()
     }, [])
 
     useEffect(() => {
@@ -60,12 +58,11 @@ const Layout = () => {
         setExchangeValue(inputValue * currencyValue)
 
     }
-    const setCurrencyChange = () => {
-
+    const handleSelectorTo = (event) => {
+        setToCurrency(event.target.value)
     }
-    const handleSelector = (event) => {
+    const handleSelectorFrom = (event) => {
         setFrom(event.target.value)
-        console.log("from", from)
     }
 
 
@@ -82,9 +79,21 @@ const Layout = () => {
                                 </div>
                             </div>
                             <div className='row'>
+                                <div className='col mb-3'>
+                                    <div>
+                                        <select class="form-select" value="USD" onChange={handleSelectorFrom} aria-label="Default select example">
+                                            {currencyData && currencyData.length ?
+                                                currencyData.map((p, index) => (
+                                                    <option key={index} value={p}>{p}</option>
+                                                )) : null}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='row'>
                                 <div className='col'>
                                     <div>
-                                        <select class="form-select" value="USD" onChange={handleSelector} aria-label="Default select example">
+                                        <select class="form-select" value="EUR" onChange={handleSelectorTo} aria-label="Default select example">
                                             {currencyData && currencyData.length ?
                                                 currencyData.map((p, index) => (
                                                     <option key={index} value={p}>{p}</option>
